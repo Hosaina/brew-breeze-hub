@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { CafeSidebar } from "@/components/cafe-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Coffee, ArrowRight, Plus, Minus } from "lucide-react";
+import { Coffee, ArrowRight, Plus, Minus, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface MenuItem {
   id: number;
@@ -75,7 +75,12 @@ const Index = () => {
       <div className="flex-1 flex flex-col min-h-screen">
         <header className="border-b">
           <div className="container flex h-16 items-center justify-between py-4">
-            <h2 className="text-lg font-semibold text-cafe-800 dark:text-cafe-100">Welcome</h2>
+            <div className="flex items-center gap-4">
+              <SidebarTrigger className="hidden lg:flex">
+                <Menu className="h-6 w-6" />
+              </SidebarTrigger>
+              <h2 className="text-lg font-semibold text-cafe-800 dark:text-cafe-100">Welcome</h2>
+            </div>
             <ThemeToggle />
           </div>
         </header>

@@ -25,8 +25,11 @@ export function CafeSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <div className="p-4">
+          <div className="flex items-center justify-between p-4">
             <h2 className="text-xl font-semibold text-cafe-800 dark:text-cafe-100">Brew Breeze</h2>
+            <SidebarTrigger className="ml-auto lg:hidden">
+              <Menu className="h-6 w-6" />
+            </SidebarTrigger>
           </div>
           <SidebarGroupContent>
             <SidebarMenu>
