@@ -1,10 +1,74 @@
 
+import { useState } from "react";
 import { CafeSidebar } from "@/components/cafe-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Coffee, ArrowRight } from "lucide-react";
+import { Coffee, ArrowRight, Plus, Minus } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+
+interface MenuItem {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  image: string;
+  category: "food" | "drink";
+  quantity: number;
+}
+
+const menuItems: MenuItem[] = [
+  {
+    id: 1,
+    title: "Cappuccino",
+    description: "Rich espresso topped with creamy milk foam, sprinkled with cocoa powder for a perfect morning start.",
+    price: 4.99,
+    image: "/placeholder.svg",
+    category: "drink",
+    quantity: 0
+  },
+  {
+    id: 2,
+    title: "Croissant",
+    description: "Buttery, flaky pastry made with premium French butter, baked fresh daily for the perfect crispy texture.",
+    price: 3.99,
+    image: "/placeholder.svg",
+    category: "food",
+    quantity: 0
+  },
+  {
+    id: 3,
+    title: "Latte",
+    description: "Smooth espresso with steamed milk and a light layer of foam, perfect for a relaxing coffee experience.",
+    price: 4.49,
+    image: "/placeholder.svg",
+    category: "drink",
+    quantity: 0
+  },
+  {
+    id: 4,
+    title: "Avocado Toast",
+    description: "Fresh avocado on artisanal sourdough bread, topped with cherry tomatoes and microgreens.",
+    price: 8.99,
+    image: "/placeholder.svg",
+    category: "food",
+    quantity: 0
+  }
+];
 
 const Index = () => {
+  const [items, setItems] = useState<MenuItem[]>(menuItems);
+  const isMobile = useIsMobile();
+
+  const updateQuantity = (id: number, increment: boolean) => {
+    setItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id
+          ? { ...item, quantity: Math.max(0, item.quantity + (increment ? 1 : -1)) }
+          : item
+      )
+    );
+  };
+
   return (
     <>
       <CafeSidebar />
@@ -37,6 +101,58 @@ const Index = () => {
                     Learn More
                     <ArrowRight className="h-5 w-5" />
                   </Button>
+                </div>
+              </section>
+
+              {/* Food & Drinks Menu Section */}
+              <section className="py-8">
+                <h2 className="text-2xl font-semibold mb-6 text-cafe-800 dark:text-cafe-100">Our Menu</h2>
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {items.map((item) => (
+                    <div key={item.id} className="glass dark:glass-dark p-4 space-y-4 transition-all hover:scale-[1.02]">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-48 object-cover rounded-lg mb-4"
+                      />
+                      <div>
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="text-xl font-semibold text-cafe-800 dark:text-cafe-100">{item.title}</h3>
+                          <span className="text-lg font-medium text-cafe-700 dark:text-cafe-200">
+                            ${item.price.toFixed(2)}
+                          </span>
+                        </div>
+                        <p className="text-muted-foreground line-clamp-2 mb-4">
+                          {item.description}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-cafe-600 dark:text-cafe-300">
+                            {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
+                          </span>
+                          <div className="flex items-center gap-3">
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => updateQuantity(item.id, false)}
+                              disabled={item.quantity === 0}
+                            >
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="w-8 text-center">{item.quantity}</span>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => updateQuantity(item.id, true)}
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </section>
 
